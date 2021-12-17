@@ -1,19 +1,14 @@
 import os
 import numpy as np
 
-from tqdm import tqdm
-from skimage import io
 from vispy import app, gloo
 from vispy.gloo import Program
 from vispy.gloo.util import _screenshot
 from vispy.util.transforms import perspective, translate, rotate
 from moviepy.editor import VideoClip
 
-DATA_ROOT = '../data/1A-DB/1A-2dtiff/'
-SAVE_ROOT = '../result1/1A-DB/1A-2dtiff/'
-INFO_NAME = 'C1_.info'
 W, H = 800, 600
-V = np.load('../data/data_256.npy')
+V = np.load('G:/Data for huige-211122/1A-DB/data_C3.npy')
 
 vert = """
     // Uniforms
@@ -102,4 +97,4 @@ if __name__ == '__main__':
     canvas = Canvas()
     canvas.show()
     clip = VideoClip(canvas.animation, duration=100)
-    clip.write_videofile('rotate_cube.mp4', fps=20)
+    clip.write_videofile('rotate_C3.mp4', fps=20)
