@@ -1,8 +1,9 @@
 import os
 import numpy as np
+import matplotlib.pyplot as plt
 
 from skimage import io
-from tqdm import tqdm
+from matplotlib.pyplot import plot,savefig
 
 DATA_ROOT = 'G:/Data for huige-211122/1A-DB/1A-2dtiff/'
 SAVE_ROOT = 'G:/Data for huige-211122/1A-DB/'
@@ -31,31 +32,20 @@ def read_data():
     # # # -------------------------------------------
 
     print('Loading images...')
-    v = []
-    num = 0
-    vtype = [('a_position', np.float32, 3),
-             ('a_color', np.float32, 4)]
-    # c = [[0, 1, 1, 1], [0, 0, 1, 1], [0, 0, 0, 1], [0, 1, 0, 1],
-    #      [1, 1, 0, 1], [1, 1, 1, 1], [1, 0, 1, 1], [1, 0, 0, 1]]
+    x = range(65535)
+    sum_num = np.zeros((65535,), dtype=np.int)
     for line in f:
-        if '.tif' in line[1:11]:
-            # print(line[1:11])
-            img_file = data_root + line[1:11]
+        if len(line.split('"')) > 1:
+            img_file = data_root + line.split('"')[1]
+            print(img_file)
             img = io.imread(img_file)
-            img[img < 2e4] = 0
-            index = np.argwhere(img > 3e4)
-
-            for i in range(len(index)):
-                pos = (np.hstack(([num], index[i])) / [d, w, h] * 2 - 1.).tolist()
-                color = [0, img[index[i, 0], index[i, 1]]/65535, 0, 1]
-
-                v.append((pos, color))
-            num += 1
+            for i in range(len(sum_num)):
+                sum_num[i] += np.sum(img == i)
 
     print('Images load completely!!! ')
-    V = np.array(v, dtype=vtype)
-    np.save(SAVE_ROOT + 'data_C3.npy', V)
-    print('Vertices construct successfully')
+    plt.plot(x, sum_num)
+    plt.show()
+    savefig('DB_C3.jpg')
 
 
 if __name__ == '__main__':

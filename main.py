@@ -10,9 +10,9 @@ from moviepy.editor import VideoClip
 
 DATA_ROOT = 'G:/Data for huige-211122/1A-DB/1A-2dtiff/'
 SAVE_ROOT = 'G:/Data for huige-211122/1A-DB/'
-INFO_NAME = 'C3_.info'
-d, w, h = 697, 2015, 2048
-THRESHOLD = 3e4
+INFO_NAME = 'C4_.info'
+d, w, h = 1278, 2015, 2048
+THRESHOLD = 2e4
 W, H = 800, 600
 
 vert = """
@@ -76,10 +76,10 @@ def read_data():
              ('a_color', np.float32, 4)]
     # c = [[0, 1, 1, 1], [0, 0, 1, 1], [0, 0, 0, 1], [0, 1, 0, 1],
     #      [1, 1, 0, 1], [1, 1, 1, 1], [1, 0, 1, 1], [1, 0, 0, 1]]
+
     for line in f:
-        if '.tif' in line[1:11]:
-            # print(line[1:11])
-            img_file = data_root + line[1:11]
+        if len(line.split('"')) > 1:
+            img_file = data_root + line.split('"')[1]
             img = io.imread(img_file)
 
             index = np.argwhere(img > THRESHOLD)
@@ -141,7 +141,7 @@ class Canvas(app.Canvas):
     # -------------------------------------------------------------------
     def animation(self, t):
         """ Added for animation with MoviePy """
-        self.theta, self.phi = 5 * t, 5 * t
+        self.theta, self.phi = 5 * t, 0
         self.updata_matrix()
         gloo.clear('black')
         self.program.draw('points')
@@ -151,5 +151,5 @@ class Canvas(app.Canvas):
 if __name__ == '__main__':
     canvas = Canvas()
     canvas.show()
-    clip = VideoClip(canvas.animation, duration=100)
-    clip.write_videofile('rotate_C3.mp4', fps=20)
+    clip = VideoClip(canvas.animation, duration=50)
+    clip.write_videofile('DB_C4.mp4', fps=20)
