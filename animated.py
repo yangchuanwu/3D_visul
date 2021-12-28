@@ -7,9 +7,16 @@ from vispy.gloo.util import _screenshot
 from vispy.util.transforms import perspective, translate, rotate
 from moviepy.editor import VideoClip
 
+DATA_NAME = 'DB'
 W, H = 800, 600
-V = np.load('G:/Data for huige-211122/1A-DB/data_C3.npy')
 
+V1 = np.load('data_V/' + DATA_NAME + '_' + 'C1.npy')
+V2 = np.load('data_V/' + DATA_NAME + '_' + 'C2.npy')
+V3 = np.load('data_V/' + DATA_NAME + '_' + 'C3.npy')
+V4 = np.load('data_V/' + DATA_NAME + '_' + 'C4.npy')
+
+# V = np.concatenate((V1, V2, V3, V4))
+V = V1
 vert = """
     // Uniforms
     uniform mat4 u_model;
@@ -96,5 +103,5 @@ class Canvas(app.Canvas):
 if __name__ == '__main__':
     canvas = Canvas()
     canvas.show()
-    clip = VideoClip(canvas.animation, duration=100)
-    clip.write_videofile('rotate_C3.mp4', fps=20)
+    clip = VideoClip(canvas.animation, duration=50)
+    clip.write_videofile('rotate_DBC1.mp4', fps=20)

@@ -8,12 +8,12 @@ from vispy.gloo.util import _screenshot
 from vispy.util.transforms import perspective, translate, rotate
 from moviepy.editor import VideoClip
 
-DATA_ROOT = 'G:/Data for huige-211122/1A-DB/1A-2dtiff/'
-SAVE_ROOT = 'G:/Data for huige-211122/1A-DB/'
-INFO_NAME = 'C4_.info'
-d, w, h = 1278, 2015, 2048
+DATA_ROOT = 'G:/Data for huige-211122'
+DATA_NAME = 'DB'
+INFO_NAME = 'C4'
+d, w, h = 696, 2015, 2048
 THRESHOLD = 2e4
-W, H = 800, 600
+W, H = 1200, 900
 
 vert = """
     // Uniforms
@@ -53,29 +53,18 @@ def read_data():
     """
     :return: imgs: [num * W * H]
     """
-    data_root = DATA_ROOT
-    save_root = SAVE_ROOT
-    if not os.path.exists(save_root):
-        os.makedirs(save_root)
-    info_name = INFO_NAME
+    data_root = os.path.join(DATA_ROOT, DATA_NAME, '2dtiff/')
+    info_name = INFO_NAME + '_.info'
 
     f = open(data_root + info_name)
-
-    # # # -------------------------------------------
-    # img1 = io.imread(data_root + 'C2_600.tif')
-    # img2 = io.imread(data_root + 'C2_602.tif')
-    # img = (img1 + img2) / 2
-    # io.imsave(data_root + 'C2_601.tif', img)
-    # exit()
-    # # # -------------------------------------------
 
     print('Loading images...')
     v = []
     num = 0
     vtype = [('a_position', np.float32, 3),
              ('a_color', np.float32, 4)]
-    # c = [[0, 1, 1, 1], [0, 0, 1, 1], [0, 0, 0, 1], [0, 1, 0, 1],
-    #      [1, 1, 0, 1], [1, 1, 1, 1], [1, 0, 1, 1], [1, 0, 0, 1]]
+    c = [[0, 1, 1, 1], [0, 0, 1, 1], [0, 0, 0, 1], [0, 1, 0, 1],
+         [1, 1, 0, 1], [1, 1, 1, 1], [1, 0, 1, 1], [1, 0, 0, 1]]
 
     for line in f:
         if len(line.split('"')) > 1:
@@ -92,8 +81,8 @@ def read_data():
 
     print('Images load completely!!! ')
     V = np.array(v, dtype=vtype)
-    # np.save(SAVE_ROOT + 'data_C3.npy', V)
-    # print('Vertices construct successfully')
+    np.save('data_V/' + DATA_NAME + '_' + INFO_NAME + '.npy', V)
+    print('Vertices construct successfully')
     return V
 
 
@@ -152,4 +141,4 @@ if __name__ == '__main__':
     canvas = Canvas()
     canvas.show()
     clip = VideoClip(canvas.animation, duration=50)
-    clip.write_videofile('DB_C4.mp4', fps=20)
+    clip.write_videofile('video_show/' + DATA_NAME + '_' + INFO_NAME + '.mp4', fps=20)
